@@ -27,6 +27,7 @@ def findMaximumCrossingSubarray(A, low, mid, high):
 
 def findMaximumSubarray(A, low, high):
     """
+        Finds the maximum subarray and its value using recursive appraoch.
         Returns left index, right index, and value of maximum subarray for given array A. 
         low and high are respecitvley start and end indcies of array A. Right index in not inclusive.
     """
@@ -46,10 +47,39 @@ def findMaximumSubarray(A, low, high):
         else:
             return (crossLow, crossHigh, crossSum); 
 
+def maxSubArray_bruteforce(A):
+    """
+       Finds the maximum subarray and its value using a bruteforce approach to maximum subarray problem.
+       Input: A an array of integer, 
+       Return low and high are indices of low and high and a maxsum 
+    
+    """
+    low = 0; 
+    high = len(A)-1; 
+
+    maximum = 0;
+    left =low; 
+    right = high;  
+    
+    
+    for i in range (low, high):
+        current = 0; 
+        for j in range (i, high):
+            current = current + A[j];
+            if (current > maximum):
+                maximum = current; 
+                left = i; 
+                right = j; 
+    return (left, right, maximum); 
+
 def main():
     A = [-1, 4, 4, 3, -4, 0];
     print A; 
     print findMaximumSubarray(A, 0, len(A)-1);
+
+    print maxSubArray_bruteforce(A); 
+
+    return; 
 
     A = [-2, -5, 6, -2, -3, 1, 5, -6, 0];
     print A; 
