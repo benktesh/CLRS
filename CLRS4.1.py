@@ -1,4 +1,6 @@
 import numpy as np;  
+import time; 
+import random; 
 
 def findMaximumCrossingSubarray(A, low, mid, high):
     """
@@ -69,26 +71,66 @@ def maxSubArray_bruteforce(A):
             if (current > maximum):
                 maximum = current; 
                 left = i; 
-                right = j; 
+                right = j;
     return (left, right, maximum); 
+def maxSubArray_LinearTime(A):
+    '''
+        4.1.5
+        At the beginning, the first element is where the max subarray ends, and is
+        the total value of maxsubarray
+    '''
+    maxEndingHere = A[0] #start with first element.
+    maxSoFar = A[0] 
+    start = 0;
+    end = 0; 
+    for i in range (1, len(A)):
+        #maxEnding here stores the sum of subarray to this index.
+        #the start index is reset whenever, sum to this index is less than the value at this index.
+        #the end index is reset whever, new element is adde to max sofar.
+        if(maxEndingHere + A[i] < A[i]):
+            start = i
+        maxEndingHere = max(A[i], maxEndingHere + A[i])
+        
+        if(maxEndingHere > maxSoFar):
+            maxSoFar = maxEndingHere
+            end = i           
+        
+    return start, end, maxSoFar
 
 def main():
-    A = [-1, 4, 4, 3, -4, 0];
-    print A; 
-    print findMaximumSubarray(A, 0, len(A)-1);
+    A = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7];
+    ##Use this switch to simulate the time.
+    #A = random.sample(range(-1000,1000),1000); 
+    print "Array:       ", A; 
+    start = time.time();
+    print "Recursive:   ", findMaximumSubarray(A, 0, len(A)-1);
+    print "     Finished: ", (time.time() - start)*1000000
+    start = time.time();
+    print "Brute Force: ", maxSubArray_bruteforce(A); 
+    print "     Finished: ", (time.time() - start)*1000000
+    start = time.time();
+    print "Linear Time: ", maxSubArray_LinearTime(A); 
+    print "     Finished: ", (time.time() - start)*1000000
+    return;
 
-    print maxSubArray_bruteforce(A); 
+   #This for loop is for simulation.
+    for i in range(0,0,1):
+        print 'working on ', i; 
+        A = random.sample(range(-1000,1000),i); 
+        #print A; 
+        start = time.time();  
+        result1 =  findMaximumSubarray(A, 0, len(A)-1);
+        elapsed1 = (time.time() - start)*1000000000;  
+        
 
-    return; 
+        start = time.time();
+        result2 =  maxSubArray_bruteforce(A); 
+        elapsed2 =(time.time() - start)*1000000000;  
 
-    A = [-2, -5, 6, -2, -3, 1, 5, -6, 0];
-    print A; 
-    print findMaximumSubarray(A, 0, len(A)-1);
+        print "(", i, ")", elapsed1, ":",  result1, " vs ", elapsed2, ":", result2; 
 
-    A = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7, 0] ;
-    print A; 
-    print findMaximumSubarray(A, 0, len(A)-1);
-
+    #return; 
+ 
      
 
 if __name__ == "__main__":
